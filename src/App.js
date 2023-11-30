@@ -1,12 +1,12 @@
-import React from "react";
-import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ReadingPage from "./pages/ReadingPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import BookDetailPage from "./pages/BookDetailPage";
-import PublicLayout from "./layout/PublicLayout";
-import MThemeProvider from "./theme/MThemeProvider";
+import React from 'react';
+import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import HomePage from './pagesRedux/HomePage';
+import ReadingPage from './pagesRedux/ReadingPage';
+import NotFoundPage from './pagesRedux/NotFoundPage';
+import BookDetailPage from './pagesRedux/BookDetailPage';
+import PublicLayout from './layout/PublicLayout';
+import MThemeProvider from './theme/MThemeProvider';
 
 function App() {
   return (

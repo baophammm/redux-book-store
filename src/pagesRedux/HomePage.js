@@ -3,7 +3,6 @@ import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import PaginationBar from '../components/PaginationBar';
 import SearchForm from '../components/SearchForm';
-import api from '../app/apiService';
 import { FormProvider } from '../form';
 import { useForm } from 'react-hook-form';
 import {
@@ -17,40 +16,28 @@ import {
   Typography,
   CardContent,
 } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getBooks, setPage, setQuery } from '../app/slices/bookStoreSlice';
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const HomePage = () => {
-  const [books, setBooks] = useState([]);
-  const [pageNum, setPageNum] = useState(1);
   const totalPage = 10;
   const limit = 10;
-
-  const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const { books, pageNum, query, loading, errorMessage } = useSelector(
+    state => state.bookStore
+  );
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const handleClickBook = bookId => {
     navigate(`/books/${bookId}`);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        let url = `/books?_page=${pageNum}&_limit=${limit}`;
-        if (query) url += `&q=${query}`;
-        const res = await api.get(url);
-        setBooks(res.data);
-        setErrorMessage('');
-      } catch (error) {
-        setErrorMessage(error.message);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, [pageNum, limit, query]);
+  useState(() => {
+    dispatch(getBooks(pageNum, limit, query));
+  }, [dispatch, pageNum, limit, query]);
 
   //--------------form
   const defaultValues = {
@@ -61,8 +48,9 @@ const HomePage = () => {
   });
   const { handleSubmit } = methods;
   const onSubmit = data => {
-    setQuery(data.searchQuery);
+    dispatch(setQuery(data.searchQuery));
   };
+
   return (
     <Container>
       <Stack sx={{ display: 'flex', alignItems: 'center', m: '2rem' }}>
@@ -83,7 +71,7 @@ const HomePage = () => {
         </FormProvider>
         <PaginationBar
           pageNum={pageNum}
-          setPageNum={setPageNum}
+          setPageNum={setPage}
           totalPageNum={totalPage}
         />
       </Stack>

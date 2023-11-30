@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
-  Button,
   Box,
   Card,
   Stack,
@@ -12,55 +11,44 @@ import {
 } from '@mui/material';
 import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import api from '../apiService';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+  getReadingListBooks,
+  removeBookFromReadingList,
+  setRemovedBookId,
+} from '../app/slices/readingListSlice';
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const ReadingPage = () => {
-  const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [removedBookId, setRemovedBookId] = useState('');
+  const { books, loading, removedBookId, errorMessage } = useSelector(
+    state => state.readingList
+  );
+
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const handleClickBook = bookId => {
     navigate(`/books/${bookId}`);
   };
 
-  const removeBook = bookId => {
-    setRemovedBookId(bookId);
-  };
-
   useEffect(() => {
     if (removedBookId) return;
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const res = await api.get(`/favorites`);
-        setBooks(res.data);
-      } catch (error) {
-        toast(error.message);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, [removedBookId]);
+    dispatch(getReadingListBooks());
+  }, [dispatch, removedBookId]);
 
   useEffect(() => {
     if (!removedBookId) return;
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await api.delete(`/favorites/${removedBookId}`);
-        toast.success('The book has been removed');
-        setRemovedBookId('');
-      } catch (error) {
-        toast(error.message);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, [removedBookId]);
+    dispatch(removeBookFromReadingList(removedBookId));
+    dispatch(setRemovedBookId(''));
+  }, [dispatch, removedBookId]);
+
+  useEffect(() => {
+    console.log('List of favorite books in useEffect:', books);
+    console.log('removedBookId in useEffect:', removedBookId);
+  }, [books, removedBookId]);
 
   return (
     <Container>
@@ -101,7 +89,8 @@ const ReadingPage = () => {
                   <Typography gutterBottom variant="body1" component="div">
                     {`${book.author}`}
                   </Typography>
-                  <Button
+                  <Box
+                    onClick={() => dispatch(setRemovedBookId(book.id))}
                     sx={{
                       position: 'absolute',
                       top: '5px',
@@ -109,13 +98,20 @@ const ReadingPage = () => {
                       backgroundColor: 'secondary.light',
                       color: 'secondary.contrastText',
                       padding: '0',
+                      minHeight: '1.5rem',
                       minWidth: '1.5rem',
+                      fontSize: '1.2rem',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+
+                      '&:hover': {
+                        cursor: 'pointer',
+                      },
                     }}
-                    size="small"
-                    onClick={() => removeBook(book.id)}
                   >
                     &times;
-                  </Button>
+                  </Box>
                 </CardContent>
               </CardActionArea>
             </Card>
