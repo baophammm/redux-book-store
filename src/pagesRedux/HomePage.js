@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { getBooks, setPage, setQuery } from '../app/slices/bookStoreSlice';
+import { getBooks, setQuery } from '../app/slices/bookStoreSlice';
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
@@ -35,8 +35,8 @@ const HomePage = () => {
     navigate(`/books/${bookId}`);
   };
 
-  useState(() => {
-    dispatch(getBooks(pageNum, limit, query));
+  useEffect(() => {
+    dispatch(getBooks({ pageNum, limit, query }));
   }, [dispatch, pageNum, limit, query]);
 
   //--------------form
@@ -71,7 +71,7 @@ const HomePage = () => {
         </FormProvider>
         <PaginationBar
           pageNum={pageNum}
-          setPageNum={setPage}
+          // setPageNum={setPage}
           totalPageNum={totalPage}
         />
       </Stack>

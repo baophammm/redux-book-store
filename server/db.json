@@ -1,17 +1,5 @@
 {
-  "favorites": [
-    {
-      "author": "Samuel Beckett",
-      "country": "Republic of Ireland",
-      "imageLink": "images/molloy-malone-dies-the-unnamable.jpg",
-      "language": "French, English",
-      "link": "https://en.wikipedia.org/wiki/Molloy_(novel)\n",
-      "pages": 256,
-      "title": "Molloy, Malone Dies, The Unnamable, the trilogy",
-      "year": 1952,
-      "id": "F7A61F18C49"
-    }
-  ],
+  "favorites": [],
   "books": [
     {
       "author": "Chinua Achebe",

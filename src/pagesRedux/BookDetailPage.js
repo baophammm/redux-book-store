@@ -19,6 +19,7 @@ const BookDetailPage = () => {
   const { book, loading, addingBook, errorMessage } = useSelector(
     state => state.book
   );
+
   const dispatch = useDispatch();
 
   useEffect(() => {

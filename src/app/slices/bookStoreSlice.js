@@ -11,12 +11,12 @@ const initialState = {
 
 export const getBooks = createAsyncThunk(
   'bookStore/getBooks',
-  async (pageNum, limit, query) => {
+  async ({ pageNum, limit, query }) => {
     let url = `/books?_page=${pageNum}$_limit=${limit}`;
     if (query) {
       url += `&q=${query}`;
     }
-    console.log(url);
+
     const response = await api.get(url);
     return response.data;
   }

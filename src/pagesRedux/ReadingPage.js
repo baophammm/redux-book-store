@@ -45,11 +45,6 @@ const ReadingPage = () => {
     dispatch(setRemovedBookId(''));
   }, [dispatch, removedBookId]);
 
-  useEffect(() => {
-    console.log('List of favorite books in useEffect:', books);
-    console.log('removedBookId in useEffect:', removedBookId);
-  }, [books, removedBookId]);
-
   return (
     <Container>
       <Typography variant="h3" sx={{ textAlign: 'center' }} m={3}>
